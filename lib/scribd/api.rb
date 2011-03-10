@@ -107,6 +107,7 @@ module Scribd
           fields['my_user_id'] = @user
         end
       end
+      fields.delete('session_key') if !fields['my_user_id'].nil?
       
       fields.reject! { |k, v| v.nil? }
 

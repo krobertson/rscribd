@@ -87,7 +87,20 @@ Content-Disposition: form-data; name=#{key.to_s.inspect}
             body.should include(serial_str.gsub(/\n/, "\r\n"))
           end
         end
-        
+
+        it "should set the multipart parameters to the given fields2" do
+          fields = { :session_key => 'session', :my_user_id => 'id' }
+          @api.send_request('test', fields)
+          body = @request.body
+          serial_str = <<-EOF
+Content-Disposition: form-data; name="my_user_id"
+
+id
+          EOF
+          body.should include(serial_str.gsub(/\n/, "\r\n"))
+          body.should_not include("Content-Disposition: form-data; name=\"session_key\"")
+        end
+
         # it "should attempt to make the request 3 times" do
         #   @http.stub!(:request).and_raise Exception
         #   @http.should_receive(:request).exactly(3).times
